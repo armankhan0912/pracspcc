@@ -1,0 +1,82 @@
+opcode_table = {
+    "STOP": "00",
+    "MOVER": "01",
+    "ADD": "02",
+    "SUB": "03"
+}
+
+symbol_table = {}
+intermediate_code = []
+
+LC = 0
+
+assembly_code = [
+    "START 100",
+    "MOVER AREG X",
+    "ADD BREG Y",
+    "X DS 1",
+    "Y DC 5",
+    "END"
+]
+
+print("PASS 1 STARTED\n")
+
+for line in assembly_code:
+    parts = line.split()
+
+    # START
+    if parts[0] == "START":
+        LC = int(parts[1])
+        continue
+
+    # END
+    if parts[0] == "END":
+        break
+
+    # If label present (not opcode)
+    if parts[0] not in opcode_table:
+        symbol_table[parts[0]] = LC
+        parts = parts[1:]
+
+    # Instruction
+    if parts[0] in opcode_table:
+        intermediate_code.append((LC, parts))
+        LC += 1
+
+    # DS (Define Storage)
+    elif parts[0] == "DS":
+        LC += int(parts[1])
+
+    # DC (Define Constant)
+    elif parts[0] == "DC":
+        LC += 1
+
+
+# PRINT SYMBOL TABLE
+print("SYMBOL TABLE:")
+for sym, addr in symbol_table.items():
+    print(sym, "->", addr)
+
+
+# PRINT INTERMEDIATE CODE
+print("\nINTERMEDIATE CODE:")
+for ic in intermediate_code:
+    print(ic)
+
+
+# PASS 2
+
+print("\nPASS 2 STARTED\n")
+print("MACHINE CODE:\n")
+
+for lc, parts in intermediate_code:
+    opcode = opcode_table[parts[0]]
+
+    operand = parts[2] if len(parts) > 2 else ""
+
+    if operand in symbol_table:
+        addr = symbol_table[operand]
+    else:
+        addr = "000"
+
+    print(lc, opcode, addr)
