@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <ctype.h>
+#include <string.h>
+
+char keywords[][10] = {"int", "float", "char", "if", "else", "while", "for", "return"};
+
+int isKeyword(char *str) {
+    for (int i = 0; i < 8; i++) {
+        if (strcmp(str, keywords[i]) == 0)
+            return 1;
+    }
+    return 0;
+}
+
+int isOperator(char ch) {
+    return (ch == '+' || ch == '-' || ch == '*' || ch == '/' || ch == '=');
+}
+
+void lexicalAnalyzer(char *expr) {
+    int i = 0;
+    char buffer[20];
+
+    printf("\nFor Expression \"%s\":\n", expr);
+
+    while (expr[i] != '\0') {
+
+        // Skip spaces
+        if (isspace(expr[i])) {
+            i++;
+            continue;
+        }
+
+        // Identifier or Keyword
+        if (isalpha(expr[i])) {
+            int j = 0;
+            while (isalnum(expr[i])) {
+                buffer[j++] = expr[i++];
+            }
+            buffer[j] = '\0';
+
+            if (isKeyword(buffer))
+                printf("Token: Keyword , Value: %s\n", buffer);
+            else
+                printf("Token: Identifier , Value: %s\n", buffer);
+        }
+
+        // Number
+        else if (isdigit(expr[i])) {
+            int j = 0;
+            while (isdigit(expr[i])) {
+                buffer[j++] = expr[i++];
+            }
+            buffer[j] = '\0';
+
+            printf("Token: Integer , Value: %s\n", buffer);
+        }
+
+        // Operator
+        else if (isOperator(expr[i])) {
+            printf("Token: Operator , Value: %c\n", expr[i]);
+            i++;
+        }
+
+        // Unidentified
+        else {
+            printf("Token: Unidentified , Value: %c\n", expr[i]);
+            i++;
+        }
+    }
+}
+
+int main() {
+    char expr1[] = "int a = b + c";
+    char expr2[] = "int x = ab + bc + 30 + switch + oy";
+
+    lexicalAnalyzer(expr1);
+    lexicalAnalyzer(expr2);
+
+    printf("\nName: Arman Khan");
+    printf("\nRoll no: 36");
+    printf("\nUIN: 231P072\n");
+
+    return 0;
+}
