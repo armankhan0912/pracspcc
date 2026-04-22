@@ -1,0 +1,36 @@
+# DFS using stack (iterative)
+
+def dfs(graph, start):
+    visited = []
+    stack = [start]
+
+    while stack:
+        node = stack.pop()
+        
+        if node not in visited:
+            visited.append(node)
+            
+            # add children in reverse (for correct order)
+            for child in reversed(graph[node]):
+                stack.append(child)
+
+    return visited
+
+
+# Example Graph (you can replace this with given graph)
+graph = {
+    'A': ['B', 'C', 'D'],
+    'B': ['E', 'F'],
+    'C': ['G'],
+    'D': ['H', 'I'],
+    'E': ['J', 'K'],
+    'F': ['L'],
+    'G': [],
+    'H': ['M', 'N'],
+    'I': ['O'],
+    'J': [], 'K': [], 'L': [], 'M': [], 'N': [], 'O': []
+}
+
+# Run DFS
+result = dfs(graph, 'A')
+print("DFS Path:", " -> ".join(result))
