@@ -1,0 +1,40 @@
+# Install library (run once in Colab)
+!pip install pgmpy
+
+from pgmpy.models import DiscreteBayesianNetwork
+from pgmpy.factors.discrete import TabularCPD
+from pgmpy.inference import VariableElimination
+
+# 1. Define structure
+model = DiscreteBayesianNetwork([
+    ('Cloudy', 'Rain'),
+    ('Rain', 'WetGrass')
+])
+
+# 2. Define CPDs
+cpd_cloudy = TabularCPD(variable='Cloudy', variable_card=2,
+                        values=[[0.5], [0.5]])
+
+cpd_rain = TabularCPD(variable='Rain', variable_card=2,
+                      values=[[0.8, 0.2],
+                              [0.2, 0.8]],
+                      evidence=['Cloudy'],
+                      evidence_card=[2])
+
+cpd_wetgrass = TabularCPD(variable='WetGrass', variable_card=2,
+                          values=[[0.9, 0.1],
+                                  [0.1, 0.9]],
+                          evidence=['Rain'],
+                          evidence_card=[2])
+
+# 3. Add CPDs
+model.add_cpds(cpd_cloudy, cpd_rain, cpd_wetgrass)
+
+# 4. Check model
+print(model.check_model())
+
+# 5. Inference
+inference = VariableElimination(model)
+result = inference.query(variables=['WetGrass'], evidence={'Cloudy': 1})
+
+print(result)
