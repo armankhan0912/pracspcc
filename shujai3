@@ -1,0 +1,35 @@
+from collections import deque
+
+def bfs(graph, start):
+    visited = []
+    queue = deque([start])
+
+    while queue:
+        node = queue.popleft()
+        
+        if node not in visited:
+            visited.append(node)
+            
+            for child in graph[node]:
+                queue.append(child)
+
+    return visited
+
+
+# Same graph (you can replace if sir gives different one)
+graph = {
+    'A': ['B', 'C', 'D'],
+    'B': ['E', 'F'],
+    'C': ['G'],
+    'D': ['H', 'I'],
+    'E': ['J', 'K'],
+    'F': ['L'],
+    'G': [],
+    'H': ['M', 'N'],
+    'I': ['O'],
+    'J': [], 'K': [], 'L': [], 'M': [], 'N': [], 'O': []
+}
+
+# Run BFS
+result = bfs(graph, 'A')
+print("BFS Path:", " -> ".join(result))
