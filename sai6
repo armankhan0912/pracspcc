@@ -1,0 +1,28 @@
+# Smart Home System using simple rule-based logic (FOL style)
+
+def to_bool(ans):
+    return ans.lower() == "yes"
+
+print("SMART HOME SYSTEM")
+print("Answer with yes or no\n")
+
+# Inputs
+night = to_bool(input("Is it night? (yes/no): "))
+dark = to_bool(input("Is the room dark? (yes/no): "))
+hot = to_bool(input("Is the room hot? (yes/no): "))
+motion = to_bool(input("Is motion detected? (yes/no): "))
+family = to_bool(input("Is family member inside? (yes/no): "))
+
+# Rules (FOL-style logic)
+light_on = dark or night
+ac_on = hot
+alarm_on = motion and not family
+door_locked = not family
+
+# Output
+print("\n----- SMART HOME DECISION -----")
+print("Light ON    :", light_on)
+print("AC ON       :", ac_on)
+print("Alarm ON    :", alarm_on)
+print("Door Locked :", door_locked)
+print("--------------------------------")
